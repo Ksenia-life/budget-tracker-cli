@@ -2,16 +2,18 @@
 
 Дисциплина - "Программирование на языке TypeScript и библиотеки фронтенд разработки"
 
+Budget Tracker CLI - консольное приложение для управления личными финансами
+
 ## Запуск проекта
 
 Установка зависимостей:
-npm install
+> npm install
 
 Компиляция:
-npm run build
+> npm run build
 
 Запуск:
-npm start
+> npm start
 
 Режим разработки:
-npm run dev
+> npm run dev
