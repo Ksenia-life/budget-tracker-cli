@@ -1,3 +1,5 @@
+import type { Account } from "./classes";
+
 export type TransactionType = "income" | "expense";
 
 export interface ITransaction {
@@ -11,8 +13,8 @@ export interface ITransaction {
 export interface IAccount {
     id: number;
     name: string;
-    addTransaction(account: ITransaction): void;
-    removeTransactionById(accountId: number): boolean;
+    addTransaction(transaction: ITransaction): void;
+    removeTransactionById(transactionId: number): boolean;
     getTransactions(): ITransaction[];
 }
 
@@ -23,10 +25,10 @@ export interface ISummary {
 }
 
 export interface IAccountManager {
-    addAccount(account: IAccount): void;
+    addAccount(account: Account): void;
     removeAccountById(accountId: number): boolean;
-    getAccounts(): IAccount[];
-    getAccountById(id: number): IAccount | undefined;
-    getSummary(accountId: number): ISummary;
-} 
+    getAccountById(id: number): Account | undefined;
+    getAllAccounts(): Account[];
+    getSummary(): ISummary;
+}
 

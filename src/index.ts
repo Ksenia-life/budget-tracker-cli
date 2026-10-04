@@ -1,135 +1,94 @@
-import {
-    IAccountManager,
-    IAccount,
-    ITransaction,
-    ISummary
-} from "./types";
+import { Transaction, Account, AccountManager } from "./classes";
 
-const accountManager: IAccountManager & { accounts: IAccount[] } = {
-    accounts: [],
+const personalAccount = new Account(1, "Личный бюджет");
 
-    addAccount(account: IAccount): void {
-        this.accounts.push(account);
-    },
+personalAccount.addTransaction(
+    new Transaction(
+        1,
+        1000,
+        "income",
+        "2023-01-01T00:00:00Z",
+        "Зарплата за январь"
+    )
+);
 
-    removeAccountById(accountId: number): boolean {
-        const index = this.accounts.findIndex(
-            (account) => account.id === accountId
-        );
+personalAccount.addTransaction(
+    new Transaction(
+        2,
+        200,
+        "expense",
+        "2023-01-05T00:00:00Z",
+        "Покупка продуктов"
+    )
+);
 
-        if (index === -1) {
-            return false;
-        }
+personalAccount.addTransaction(
+    new Transaction(
+        3,
+        150,
+        "expense",
+        "2023-01-10T00:00:00Z",
+        "Оплата коммунальных услуг"
+    )
+);
 
-        this.accounts.splice(index, 1);
-        return true;
-    },
+const manager = new AccountManager();
 
-    getAccounts(): IAccount[] {
-        return this.accounts;
-    },
+manager.addAccount(personalAccount);
 
-    getAccountById(id: number): IAccount | undefined {
-        const index = this.accounts.findIndex(
-            (account) => account.id === id
-        );
-        return this.accounts[index];
-    },
+console.log("Список всех бюджетов:", manager.getAllAccounts());
+console.log("Найденный счёт:", manager.getAccountById(1));
+console.log("Транзакции:", personalAccount.getTransactions());
 
-    getSummary(accountId: number): ISummary {
-        const account = this.getAccountById(accountId);
+console.log(
+    "Сводная информация о бюджете:",
+    personalAccount.getSummary()
+);
 
-        if (!account) {
-            throw new Error("Счёт не найден");
-        }
+console.log(
+    "Общая сводная информация:",
+    manager.getSummary()
+);
 
-        const transactions = account.getTransactions();
+console.log(
+    "Краткая информация о счёте:",
+    personalAccount.getSummaryString()
+);
 
-        const income = transactions.reduce((sum, transaction) => {
-            if (transaction.type === "income") {
-            return sum + transaction.amount;
-        }
+console.log(
+    "Краткая информация обо всех счетах:",
+    manager.getSummaryString()
+);
 
-        return sum;
-        }, 0);
+console.log("\nСтроковое представление счёта:");
+console.log(String(personalAccount));
 
-        const expenses = transactions.reduce((sum, transaction) => {
-            if (transaction.type === "expense") {
-                return sum + transaction.amount;
-            }
-            return sum;
-        }, 0);
+console.log("\nСтроковое представление всех бюджетов:");
+console.log(String(manager));
 
-        const balance = income - expenses;
+console.log("\nТранзакции личного бюджета:");
+personalAccount
+    .getTransactions()
+    .forEach(transaction => console.log(transaction.toString()));
 
-        return { 
-            income, 
-            expenses,
-            balance
-        };
-    }
-};
+console.log(
+    "Удаление транзакции:",
+    personalAccount.removeTransactionById(3)
+);
 
-const account: IAccount & { transactions: ITransaction[] } = {
-  id: 1,
-  name: "Личный бюджет",
-  transactions: [],
+console.log(
+    "Транзакции после удаления:",
+    personalAccount.getTransactions()
+);
 
-  addTransaction(transaction: ITransaction): void {
-    this.transactions.push(transaction);
-  },
-  removeTransactionById(transactionId: number): boolean {
-    const index = this.transactions.findIndex(
-            (transaction) => transaction.id === transactionId
-        );
+console.log(
+    "Удаление счёта:",
+    manager.removeAccountById(personalAccount.id)
+);
 
-        if (index === -1) {
-            return false;
-        }
-
-        this.transactions.splice(index, 1);
-        return true;
-  },
-  getTransactions(): ITransaction[] {
-    return this.transactions;
-  }
-};
-
-account.addTransaction({
-  id: 1,
-  amount: 1000,
-  type: 'income',
-  date: '2023-01-01T00:00:00Z',
-  description: 'Зарплата за январь'
-});
-
-account.addTransaction({
-  id: 2,
-  amount: 200,
-  type: 'expense',
-  date: '2023-01-05T00:00:00Z',
-  description: 'Покупка продуктов'
-});
-
-account.addTransaction({
-  id: 3,
-  amount: 150,
-  type: 'expense',
-  date: '2023-01-10T00:00:00Z',
-  description: 'Оплата коммунальных услуг'
-});
-
-accountManager.addAccount(account);
-
-console.log("Список всех бюджетов:", accountManager.getAccounts());
-console.log("Найденный счёт:", accountManager.getAccountById(1));
-console.log("Транзакции:", account.getTransactions());
-console.log("Сводная информация о бюджете:", accountManager.getSummary(1));
-
-console.log("Удаление транзакции:", account.removeTransactionById(3));
-console.log("Транзакции после удаления:", account.getTransactions());
-
-accountManager.removeAccountById(account.id);
-console.log("Список всех бюджетов:", accountManager.getAccounts());
+console.log(
+    "Список всех бюджетов после удаления:",
+    manager.getAllAccounts()
+);
 
 // console.log("🚀 Budget Tracker CLI");
