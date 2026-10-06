@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "none",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "outFile": "./dist/budget-tracker.js",
     "rootDir": "./src",
-    "strict": true
+    "outDir": "./dist",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "formatCurrency": ["./src/lib/budget-utils.js"]
+    }
   },
   "include": [
     "src/interfaces/**/*.ts",
     "src/classes/**/*.ts",
+    "src/lib/**/*.d.ts",
     "src/index.ts"
   ]
 }

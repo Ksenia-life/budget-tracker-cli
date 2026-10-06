@@ -1,9 +1,10 @@
-namespace BudgetTracker {
-    export interface IAccountManager {
-        addAccount(account: Account): void;
-        removeAccountById(accountId: number): boolean;
-        getAccountById(id: number): Account | undefined;
-        getAllAccounts(): Account[];
-        getSummary(): ISummary;
-    }
+import { IAccount } from "./IAccount";
+import { ISummary } from "./ISummary";
+
+export interface IAccountManager {
+    addAccount(account: IAccount): void;
+    removeAccountById(accountId: string): boolean;
+    getAccountById(id: string): IAccount | undefined;
+    getAllAccounts(): IAccount[];
+    getSummary(): ISummary;
 }

@@ -1,9 +1,9 @@
-namespace BudgetTracker {
-    export interface ITransaction {
-        id: number;
-        amount: number;
-        type: TransactionType;
-        date: string;
-        description: string;
-    }
+import { TransactionType } from "./TransactionType";
+
+export interface ITransaction {
+    id: string;
+    amount: number;
+    type: TransactionType;
+    date: string;
+    description: string;
 }
