@@ -3,6 +3,7 @@ import { IAccount } from "../interfaces/IAccount";
 import { ISummary } from "../interfaces/ISummary";
 import { Transaction } from "./Transaction";
 import { formatCurrency } from "formatCurrency";
+import { AccountUpdate } from "../interfaces/utility-types";
 
 export class Account implements IAccount, ISummary {
     readonly id: string;
@@ -13,6 +14,12 @@ export class Account implements IAccount, ISummary {
         this.id = uuidv4();
         this.name = name;
         this.transactions = [];
+    }
+
+    update(update: AccountUpdate): void {
+        if (update.name !== undefined) {
+            this.name = update.name;
+        }
     }
 
     get income(): number {

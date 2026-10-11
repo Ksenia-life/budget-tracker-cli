@@ -1,6 +1,16 @@
 import { Account } from "./classes/Account";
 import { Transaction } from "./classes/Transaction";
 import { AccountManager } from "./classes/AccountManager";
+import type {
+    CategoryLimits,
+    TransactionConstructorParams,
+    TransactionInstance,
+    NullableDescription,
+    CompleteTransaction,
+    TransactionWithoutDescription,
+    TransactionPreview,
+    AccountInfo
+} from "./interfaces/utility-types";
 
 const personalAccount = new Account("Личный бюджет");
 
@@ -25,13 +35,62 @@ const transaction3 = new Transaction(
     "Оплата коммунальных услуг"
 );
 
+transaction1.update({ amount: 1200 });
+personalAccount.update({ name: "Основной счёт" });
+
+console.log("Обновлённая транзакция:", transaction1.toString());
+console.log("Обновлённое название счёта:", personalAccount.name);
+
+const completeTransaction: CompleteTransaction = transaction1;
+
+const transactionWithoutDescription: TransactionWithoutDescription = {
+    id: completeTransaction.id,
+    amount: completeTransaction.amount,
+    type: completeTransaction.type,
+    date: completeTransaction.date
+};
+
+const transactionPreview: TransactionPreview = transactionWithoutDescription;
+
+const accountInfo: AccountInfo = {
+    id: personalAccount.id,
+    name: personalAccount.name
+};
+
+console.log("Транзакция без описания:", transactionWithoutDescription);
+console.log("Краткая информация о транзакции:", transactionPreview);
+console.log("Информация о счёте:", accountInfo);
+
 personalAccount.addTransaction(transaction1);
 personalAccount.addTransaction(transaction2);
 personalAccount.addTransaction(transaction3);
 
+const limits: CategoryLimits = {
+    income: 10000,
+    expense: 5000
+};
+
+console.log("Лимит пополнений:", limits.income);
+console.log("Лимит трат:", limits.expense);
+
 const manager = new AccountManager();
 
 manager.addAccount(personalAccount);
+
+const nullableDescription: NullableDescription = null;
+
+console.log("Описание транзакции:", nullableDescription ?? "Не указано");
+
+const transactionParams: TransactionConstructorParams = [
+    500,
+    "expense",
+    "2023-02-01T00:00:00Z",
+    "Покупка"
+];
+
+const newTransaction: TransactionInstance = new Transaction(...transactionParams);
+
+console.log("Новая транзакция:", newTransaction.toString());
 
 console.log("Список всех бюджетов:", manager.getAllAccounts());
 console.log("Найденный счёт:", manager.getAccountById(personalAccount.id));
@@ -63,7 +122,7 @@ console.log(String(personalAccount));
 console.log("\nСтроковое представление всех бюджетов:");
 console.log(String(manager));
 
-console.log("\nТранзакции личного бюджета:");
+console.log(`\nТранзакции счёта "${personalAccount.name}":`);
 personalAccount
     .getTransactions()
     .forEach(transaction => console.log(transaction.toString()));

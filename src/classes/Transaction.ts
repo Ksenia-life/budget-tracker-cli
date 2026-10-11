@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import { TransactionUpdate } from "../interfaces/utility-types";
 import { ITransaction } from "../interfaces/ITransaction";
 import { TransactionType } from "../interfaces/TransactionType";
 import { formatCurrency } from "formatCurrency";
@@ -17,6 +18,24 @@ export class Transaction implements ITransaction {
         this.type = type;
         this.date = date;
         this.description = description;
+    }
+
+    update(update: TransactionUpdate): void {
+        if (update.amount !== undefined) {
+            this.amount = update.amount;
+        }
+
+        if (update.type !== undefined) {
+            this.type = update.type;
+        }
+
+        if (update.date !== undefined) {
+            this.date = update.date;
+        }
+
+        if (update.description !== undefined) {
+            this.description = update.description;
+        }
     }
 
     toString(): string {
