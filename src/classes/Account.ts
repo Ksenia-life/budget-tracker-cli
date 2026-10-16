@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import { IAccount } from "../interfaces/IAccount";
 import { ISummary } from "../interfaces/ISummary";
 import { Transaction } from "./Transaction";
+import { writeFile } from "node:fs/promises";
+import { escapeCsvValue } from "../utils/escapeCsvValue";
 import { formatCurrency } from "formatCurrency";
 import { AccountUpdate } from "../interfaces/utility-types";
 
@@ -83,5 +85,32 @@ export class Account implements IAccount, ISummary {
             return true;
         }
         return false;
+    }
+    async exportTransactionsToCSV(filename: string): Promise<void> {
+        const header = "id,amount,type,date,description";
+
+        const rows = this.transactions.map(transaction => {
+            const values = [
+                transaction.id,
+                transaction.amount,
+                transaction.type,
+                transaction.date,
+                transaction.description
+            ];
+
+            return values.map(escapeCsvValue).join(",");
+        });
+
+        const csvContent = [header, ...rows].join("\n");
+        try {
+            await writeFile(filename, csvContent, "utf8");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw new Error(`Не удалось записать CSV-файл "${filename}": ${error.message}`);
+            }
+
+            throw new Error(`Не удалось записать CSV-файл "${filename}".`);
+        }
+
     }
 }

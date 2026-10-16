@@ -6,4 +6,5 @@ export interface IAccount {
     addTransaction(transaction: ITransaction): void;
     removeTransactionById(transactionId: string): boolean;
     getTransactions(): ITransaction[];
+    exportTransactionsToCSV(filename: string): Promise<void>;
 }

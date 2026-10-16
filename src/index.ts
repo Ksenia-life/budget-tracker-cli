@@ -127,6 +127,17 @@ personalAccount
     .getTransactions()
     .forEach(transaction => console.log(transaction.toString()));
 
+try {
+    await personalAccount.exportTransactionsToCSV("main_account.csv");
+    console.log("Транзакции успешно экспортированы в CSV.");
+} catch (error: unknown) {
+    if (error instanceof Error) {
+        console.log("Ошибка экспорта:", error.message);
+    } else {
+        console.log("Неизвестная ошибка экспорта:", error);
+    }
+}
+
 console.log(
     "Удаление транзакции:",
     personalAccount.removeTransactionById(transaction3.id)
