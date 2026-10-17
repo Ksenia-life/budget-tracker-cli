@@ -6,6 +6,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
       "formatCurrency": ["./src/lib/budget-utils.js"]

@@ -21,6 +21,18 @@ import type {
 
 const personalAccount = new Account("Личный бюджет");
 
+const originalId = personalAccount.id;
+
+try {
+    personalAccount.id = "new-id";
+} catch (error: unknown) {
+    if (error instanceof Error) {
+        console.log("Изменение id запрещено:", error.message);
+    }
+}
+
+console.log("ID остался прежним:", personalAccount.id === originalId);
+
 const transaction1 = new Transaction(
     1000,
     "income",

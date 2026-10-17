@@ -6,10 +6,17 @@ import { writeFile } from "node:fs/promises";
 import { escapeCsvValue } from "../utils/escapeCsvValue";
 import { formatCurrency } from "formatCurrency";
 import { AccountUpdate } from "../interfaces/utility-types";
+import { LogClass } from "../decorators/LogClass";
+import { LogMethod } from "../decorators/LogMethod";
+import { ReadOnly } from "../decorators/ReadOnly";
+import { Metadata } from "../decorators/Metadata";
 
+@LogClass
 export class Account implements IAccount, ISummary {
-    readonly id: string;
+    @ReadOnly
+    id: string;
     name: string;
+    @Metadata("description", "Массив транзакций счета")
     transactions: Transaction[];
 
     constructor(name: string) {
@@ -46,6 +53,8 @@ export class Account implements IAccount, ISummary {
     get balance(): number {
         return this.income - this.expenses;
     }
+
+    @LogMethod
     addTransaction(transaction: Transaction): void {
         this.transactions.push(transaction);
     }
@@ -60,7 +69,9 @@ export class Account implements IAccount, ISummary {
     }
 
     getSummaryString(): string {
-        return `Название ${this.name}: баланс ${formatCurrency(this.balance)}, количество транзакций ${this.transactions.length}`;
+        const description = Reflect.getMetadata("description", this, "transactions");
+
+        return `Название ${this.name}: баланс ${formatCurrency(this.balance)}, количество транзакций ${this.transactions.length}, ${description}`;
     }
 
     toString(): string {
@@ -71,10 +82,12 @@ export class Account implements IAccount, ISummary {
         return `Счёт #${this.id}: ${this.name}\n${transactionsString}`;
     }
 
+    @LogMethod
     getTransactions(): Transaction[] {
         return this.transactions;
     }
 
+    @LogMethod
     removeTransactionById(transactionId: string): boolean {
         const index = this.transactions.findIndex(
             transaction => transaction.id === transactionId
