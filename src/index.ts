@@ -11,6 +11,13 @@ import type {
     TransactionPreview,
     AccountInfo
 } from "./interfaces/utility-types";
+import type { ITransaction } from "./interfaces/ITransaction";
+import type {
+    TransactionFieldType,
+    OptionalTransaction,
+    ReadonlyTransactionFields,
+    IsIncome
+} from "./interfaces/mapped-types";
 
 const personalAccount = new Account("Личный бюджет");
 
@@ -157,3 +164,36 @@ console.log(
     "Список всех бюджетов после удаления:",
     manager.getAllAccounts()
 );
+
+type AmountType = TransactionFieldType<"amount">;
+type UnknownType = TransactionFieldType<"unknown">;
+
+type CheckIncome1 = IsIncome<{ type: "income"; amount: number }>;
+type CheckIncome2 = IsIncome<{ type: "expense"; amount: number }>;
+type CheckIncome3 = IsIncome<ITransaction>;
+
+const amountExample: AmountType = transaction1.amount;
+
+const optionalExample: OptionalTransaction<"description" | "date"> = {
+    id: transaction1.id,
+    amount: transaction1.amount,
+    type: transaction1.type
+};
+
+const readonlyExample: ReadonlyTransactionFields<"id" | "type"> = {
+    id: transaction2.id,
+    amount: transaction2.amount,
+    type: transaction2.type,
+    date: transaction2.date,
+    description: transaction2.description
+};
+
+const checkIncome1: CheckIncome1 = true;
+const checkIncome2: CheckIncome2 = false;
+const checkIncome3: CheckIncome3 = false;
+
+console.log("\nПримеры типов из ДЗ11:");
+console.log("Сумма:", amountExample);
+console.log("Необязательные поля:", optionalExample);
+console.log("Поля только для чтения:", readonlyExample);
+console.log("Проверки дохода:", checkIncome1, checkIncome2, checkIncome3);
