@@ -20,6 +20,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
+        "inquirer": "^14.2.3",
         "moment": "^2.31.0",
         "reflect-metadata": "^0.2.2",
         "uuid": "^14.0.2"
